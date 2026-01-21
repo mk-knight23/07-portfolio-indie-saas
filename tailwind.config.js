@@ -7,8 +7,8 @@ export default {
     theme: {
         extend: {
             colors: {
-                brand: "#00f2ff",
-                dark: "#0a0a0a",
+                brand: "#22d3ee", // Cyan-400 for a crisp tech foundation
+                dark: "#020617",
             },
             boxShadow: {
                 'brand': '0 0 40px rgba(0, 242, 255, 0.1)',
