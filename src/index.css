@@ -1,23 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+    --color-brand: #06B6D4;
+}
 
 @layer base {
     body {
-        @apply antialiased bg-[#020617] text-slate-300;
+        @apply bg-[#020617] text-white antialiased selection:bg-brand/30;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 }
 
-.neo-card {
-    @apply bg-slate-900/50 backdrop-blur-2xl border border-white/5 rounded-2xl p-6 hover:border-brand/50 hover:shadow-brand transition-all duration-500;
-}
+@layer components {
+    .circuit-bg {
+        background-color: #020617;
+        background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+        background-size: 32px 32px;
+    }
 
-.glow-text {
-    @apply text-brand drop-shadow-brand;
-}
-
-.circuit-bg {
-    background-image:
-        radial-gradient(circle at 2px 2px, rgba(0, 242, 255, 0.05) 1px, transparent 0);
-    background-size: 24px 24px;
+    .neo-card {
+        @apply p-8 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-3xl transition-all duration-500 hover:border-brand/40;
+    }
 }

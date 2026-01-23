@@ -147,7 +147,7 @@ export default function App() {
                             <a key={m} href="#" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-brand transition-all">{m}</a>
                         ))}
                     </div>
-                    <p className="text-[10px] font-bold text-slate-700 uppercase tracking-[0.5em]">© 2024 MK_STACKPOINT • 29/30 DEPLOYED</p>
+                    <p className="text-[10px] font-bold text-slate-700 uppercase tracking-[0.5em]">© 2026 STACKPOINT // ADVANCED • 29/30 DISPATCHED</p>
                 </div>
             </footer>
         </div>
