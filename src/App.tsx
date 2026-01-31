@@ -6,10 +6,11 @@ import {
 } from 'lucide-react';
 
 const vibeProducts = [
-    { name: 'VIBE CLI', tagline: 'Multi-agent AI coding tool', icon: Terminal, status: 'In Development', color: 'from-pink-500 to-rose-500' },
-    { name: 'VIBE VS Code', tagline: 'Multi-agent IDE assistant', icon: Code2, status: 'Planned', color: 'from-violet-500 to-purple-500' },
-    { name: 'VIBE Web', tagline: 'Documentation hub', icon: Globe, status: 'Live', color: 'from-amber-500 to-orange-500' },
-    { name: 'VIBE Chat', tagline: 'AI website builder', icon: MessageSquare, status: 'Planned', color: 'from-emerald-500 to-teal-500' }
+    { name: 'AI-VIBE-Automation', tagline: 'Workflow orchestration', icon: Zap, status: 'In Development', color: 'from-pink-500 to-rose-500' },
+    { name: 'AI-VIBE-CLI', tagline: 'Multi-agent AI interface', icon: Terminal, status: 'In Development', color: 'from-violet-500 to-purple-500' },
+    { name: 'AI-VIBE-ChatWeb', tagline: 'Conversational agent hub', icon: MessageSquare, status: 'Live', color: 'from-amber-500 to-orange-500' },
+    { name: 'AI-VIBE-WebBuilder', tagline: 'Generative site architect', icon: Globe, status: 'Planned', color: 'from-emerald-500 to-teal-500' },
+    { name: 'AI-VIBE-VSCode', tagline: 'State-machine assistant', icon: Code2, status: 'Planned', color: 'from-cyan-500 to-blue-500' }
 ];
 
 const selectedProjects = [
@@ -227,7 +228,7 @@ export default function App() {
                             Crafting <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500 font-semibold">
                                 delightful digital experiences
                             </span> with motion, color, and intention.
-                            Currently building the VIBE Ecosystem.
+                            Currently architecting the AI-VIBE-ECOSYSTEM v2.0.
                         </motion.p>
 
                         <motion.div
@@ -261,7 +262,7 @@ export default function App() {
                 <section className="grid grid-cols-4 gap-6 mb-24">
                     {[
                         { value: '60+', label: 'Projects', icon: Sparkles, color: 'from-pink-500 to-rose-500' },
-                        { value: '4', label: 'Products', icon: Star, color: 'from-violet-500 to-purple-500' },
+                        { value: '05', label: 'Products', icon: Star, color: 'from-violet-500 to-purple-500' },
                         { value: '∞', label: 'Ideas', icon: Flame, color: 'from-amber-500 to-orange-500' },
                         { value: '❤️', label: 'Passion', icon: Heart, color: 'from-rose-500 to-red-500' }
                     ].map((stat, i) => (
@@ -342,7 +343,7 @@ export default function App() {
                             >
                                 <Sparkles className="w-5 h-5" />
                             </motion.div>
-                            <h2 className="text-3xl font-bold">VIBE Ecosystem</h2>
+                            <h2 className="text-3xl font-bold">AI-VIBE-ECOSYSTEM v2.0</h2>
                         </div>
 
                         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -369,9 +370,8 @@ export default function App() {
                                         </motion.div>
                                         <h3 className="font-bold text-lg mb-1 relative z-10">{product.name}</h3>
                                         <p className="text-white/80 text-sm mb-3 relative z-10">{product.tagline}</p>
-                                        <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                                            product.status === 'Live' ? 'bg-green-400/30 text-green-100' : 'bg-white/20 text-white/80'
-                                        }`}>
+                                        <span className={`text-xs px-3 py-1 rounded-full font-medium ${product.status === 'Live' ? 'bg-green-400/30 text-green-100' : 'bg-white/20 text-white/80'
+                                            }`}>
                                             {product.status}
                                         </span>
                                     </div>
@@ -398,11 +398,10 @@ export default function App() {
                                     onClick={() => setActiveFilter(filter)}
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className={`px-6 py-3 rounded-xl text-sm font-medium transition-all ${
-                                        activeFilter === filter
-                                            ? 'bg-gradient-to-r from-pink-500 to-violet-500 text-white'
-                                            : 'bg-white/5 text-gray-400 hover:text-white'
-                                    }`}
+                                    className={`px-6 py-3 rounded-xl text-sm font-medium transition-all ${activeFilter === filter
+                                        ? 'bg-gradient-to-r from-pink-500 to-violet-500 text-white'
+                                        : 'bg-white/5 text-gray-400 hover:text-white'
+                                        }`}
                                 >
                                     {filter}
                                 </motion.button>
@@ -436,9 +435,8 @@ export default function App() {
                                             {project.name}
                                         </h3>
                                         <div className="flex items-center gap-2">
-                                            <span className={`px-2 py-0.5 rounded-full text-xs ${
-                                                project.category === 'Web' ? 'bg-fuchsia-500/30 text-fuchsia-300' : 'bg-amber-500/30 text-amber-300'
-                                            }`}>
+                                            <span className={`px-2 py-0.5 rounded-full text-xs ${project.category === 'Web' ? 'bg-fuchsia-500/30 text-fuchsia-300' : 'bg-amber-500/30 text-amber-300'
+                                                }`}>
                                                 {project.category}
                                             </span>
                                             <span className="text-sm text-gray-500">{project.tech}</span>
@@ -635,12 +633,12 @@ export default function App() {
                                     </h3>
                                     <div className="space-y-3">
                                         <a href="https://github.com/mk-knight23" target="_blank" rel="noopener"
-                                           className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition-colors">
+                                            className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition-colors">
                                             <Github className="w-4 h-4" />
                                             <span className="text-sm">github.com/mk-knight23</span>
                                         </a>
                                         <a href="https://www.linkedin.com/in/kazi-musharraf-0674871a4" target="_blank" rel="noopener"
-                                           className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition-colors">
+                                            className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition-colors">
                                             <Linkedin className="w-4 h-4" />
                                             <span className="text-sm">linkedin.com/in/kazi-musharraf</span>
                                         </a>
@@ -734,6 +732,59 @@ export default function App() {
                                     </p>
                                 </motion.div>
                             </div>
+                        </div>
+                    </motion.div>
+                </section>
+
+                {/* vNext: Growth Metrics Section (SaaS Credibility) */}
+                <section id="metrics" className="mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <div className="flex items-center gap-3 mb-6">
+                            <span className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full text-sm font-bold">
+                                Build in Public
+                            </span>
+                        </div>
+                        <h2 className="text-4xl md:text-5xl font-bold mb-4">Growth & Metrics</h2>
+                        <p className="text-gray-400 mb-12 text-lg max-w-2xl">
+                            Honest numbers from the AI-VIBE-ECOSYSTEM v2.0 build. No inflated metrics, real progress.
+                        </p>
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                            <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-center">
+                                <div className="text-5xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-2">
+                                    4
+                                </div>
+                                <p className="text-gray-300 font-semibold mb-1">Products in Roadmap</p>
+                                <p className="text-gray-500 text-sm">Automation • CLI • Chat • Builder • VSCode</p>
+                            </div>
+
+                            <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-center">
+                                <div className="text-5xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                                    60+
+                                </div>
+                                <p className="text-gray-300 font-semibold mb-1">Competitors Analyzed</p>
+                                <p className="text-gray-500 text-sm">Market research complete</p>
+                            </div>
+
+                            <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-center">
+                                <div className="text-5xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent mb-2">
+                                    55
+                                </div>
+                                <p className="text-gray-300 font-semibold mb-1">Features Planned</p>
+                                <p className="text-gray-500 text-sm">4-tier prompt strategy</p>
+                            </div>
+                        </div>
+
+                        <div className="mt-8 p-6 bg-white/5 border border-white/10 rounded-2xl">
+                            <p className="text-gray-400 text-sm text-center">
+                                <span className="text-emerald-400 font-semibold">📈 Building in public</span> —
+                                Documenting progress, learning in public, iterating based on feedback.
+                                No fake revenue charts, just real product development.
+                            </p>
                         </div>
                     </motion.div>
                 </section>
