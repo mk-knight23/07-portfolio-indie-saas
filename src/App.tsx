@@ -1,874 +1,736 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 import {
-    Terminal, Code2, Globe, MessageSquare, Mail, Github, Linkedin, Phone,
-    ExternalLink, Sparkles, Flame, Zap, Star, Heart, ArrowUpRight, Play
+    Rocket, Code2, Globe, Zap, Star, Heart, ArrowUpRight, Github, Linkedin, Mail, Phone,
+    ExternalLink, TrendingUp, Users, Layers, Sparkles, Terminal, Palette, Gamepad2,
+    Briefcase, GraduationCap, MapPin, Calendar, CheckCircle2, Lock, FileText, ChefHat, Compass
 } from 'lucide-react';
 
-const vibeProducts = [
-    { name: 'AI-VIBE-Automation', tagline: 'Workflow orchestration', icon: Zap, status: 'In Development', color: 'from-pink-500 to-rose-500' },
-    { name: 'AI-VIBE-CLI', tagline: 'Multi-agent AI interface', icon: Terminal, status: 'In Development', color: 'from-violet-500 to-purple-500' },
-    { name: 'AI-VIBE-ChatWeb', tagline: 'Conversational agent hub', icon: MessageSquare, status: 'Live', color: 'from-amber-500 to-orange-500' },
-    { name: 'AI-VIBE-WebBuilder', tagline: 'Generative site architect', icon: Globe, status: 'Planned', color: 'from-emerald-500 to-teal-500' },
-    { name: 'AI-VIBE-VSCode', tagline: 'State-machine assistant', icon: Code2, status: 'Planned', color: 'from-cyan-500 to-blue-500' }
+// Top 8 Featured Projects for Indie SaaS lens
+const featuredProjects = [
+    {
+        id: 'ai-vibe',
+        name: 'AI-VIBE-ECOSYSTEM',
+        tagline: 'Multi-agent AI platform for developers',
+        description: 'A suite of AI-powered tools including Automation, CLI, ChatWeb, and WebBuilder. Built for solopreneurs who want to ship faster.',
+        tech: ['React', 'TypeScript', 'Node.js', 'AI/LLM'],
+        category: 'Platform',
+        status: 'In Development',
+        icon: Zap,
+        color: 'from-amber-400 to-orange-500',
+        github: 'https://github.com/mk-knight23'
+    },
+    {
+        id: 'quizflow',
+        name: 'QuizFlow PDF Generator',
+        tagline: 'Turn PDFs into interactive quizzes',
+        description: 'Upload any PDF and generate AI-powered quizzes instantly. Perfect for educators and self-learners.',
+        tech: ['React', 'PDF.js', 'OpenAI'],
+        category: 'SaaS Tool',
+        status: 'Live',
+        icon: FileText,
+        color: 'from-emerald-400 to-teal-500',
+        github: 'https://github.com/mk-knight23/tool-quizflow-pdf-quiz-generator'
+    },
+    {
+        id: 'vaultpass',
+        name: 'VaultPass',
+        tagline: 'Secure password generator',
+        description: 'Military-grade password generation with entropy analysis. No data leaves your browser.',
+        tech: ['JavaScript', 'Web Crypto API'],
+        category: 'Security Tool',
+        status: 'Live',
+        icon: Lock,
+        color: 'from-violet-400 to-purple-500',
+        github: 'https://github.com/mk-knight23/tool-vaultpass-secure-password-generator'
+    },
+    {
+        id: 'viral-creator',
+        name: 'Viral Creator',
+        tagline: 'Content creation toolkit',
+        description: 'Tools and templates for creating viral social media content. Built for creators, by a creator.',
+        tech: ['React', 'Canvas API', 'Tailwind'],
+        category: 'Creator Tool',
+        status: 'Live',
+        icon: Sparkles,
+        color: 'from-pink-400 to-rose-500',
+        github: 'https://github.com/mk-knight23/web-viral-creator'
+    },
+    {
+        id: 'career-navigator',
+        name: 'Career Navigator',
+        tagline: 'AI-powered career guidance',
+        description: 'Personalized career roadmaps based on your skills and market trends.',
+        tech: ['React', 'AI Integration', 'Charts'],
+        category: 'Web App',
+        status: 'Live',
+        icon: Compass,
+        color: 'from-blue-400 to-indigo-500',
+        github: 'https://github.com/mk-knight23/web-career-navigator'
+    },
+    {
+        id: 'culinary-discovery',
+        name: 'Culinary Discovery',
+        tagline: 'Recipe exploration platform',
+        description: 'Discover recipes from around the world with smart filtering and meal planning.',
+        tech: ['React', 'API Integration', 'PWA'],
+        category: 'Web App',
+        status: 'Live',
+        icon: ChefHat,
+        color: 'from-orange-400 to-amber-500',
+        github: 'https://github.com/mk-knight23/web-culinary-discovery'
+    },
+    {
+        id: 'flux-arcade',
+        name: 'Flux Arcade',
+        tagline: 'Browser-based gaming hub',
+        description: 'Collection of addictive mini-games built with modern web tech. No installs, just play.',
+        tech: ['Canvas', 'TypeScript', 'Game Logic'],
+        category: 'Game',
+        status: 'Live',
+        icon: Gamepad2,
+        color: 'from-cyan-400 to-blue-500',
+        github: 'https://github.com/mk-knight23/game-flux-arcade'
+    },
+    {
+        id: 'portfolio',
+        name: 'This Portfolio',
+        tagline: 'Indie SaaS founder showcase',
+        description: 'You are here. Built to demonstrate that I can ship polished products fast.',
+        tech: ['React', 'Vite', 'Tailwind', 'Framer Motion'],
+        category: 'Portfolio',
+        status: 'Live',
+        icon: Rocket,
+        color: 'from-amber-500 to-orange-500',
+        github: 'https://github.com/mk-knight23/07-portfolio-indie-saas'
+    }
 ];
 
-const selectedProjects = [
-    { name: 'Neon Dashboard', category: 'Web', tech: 'Next.js', color: 'from-fuchsia-500 to-pink-500', emoji: '✨' },
-    { name: 'Pulse Analytics', category: 'Tool', tech: 'React', color: 'from-cyan-500 to-blue-500', emoji: '📊' },
-    { name: 'Flux Chat', category: 'Web', tech: 'TypeScript', color: 'from-violet-500 to-purple-500', emoji: '💬' },
-    { name: 'Quantum Tasks', category: 'Tool', tech: 'Vue', color: 'from-amber-500 to-yellow-500', emoji: '⚡' },
-    { name: 'Zenith Notes', category: 'Web', tech: 'React', color: 'from-emerald-500 to-green-500', emoji: '📝' },
-    { name: 'Nova Forms', category: 'Tool', tech: 'Next.js', color: 'from-rose-500 to-red-500', emoji: '📋' }
-];
-
-const skillsByCategory = {
-    'Magic Stack': ['React', 'Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
-    'Creative Tools': ['Figma', 'Protopie', 'Blender', 'After Effects'],
-    'Backend': ['Node.js', 'Supabase', 'Prisma', 'Edge Functions'],
-    'Experiments': ['WebGL', 'Three.js', 'GSAP', 'Canvas API']
+// All 60 projects organized by category
+const allProjects = {
+    portfolios: [
+        { name: 'DevTools Portfolio', desc: 'Terminal-inspired developer portfolio', tech: 'Vite + React + TS' },
+        { name: 'Fullstack Portfolio', desc: 'Product-focused SaaS showcase', tech: 'Next.js + React + TS' },
+        { name: 'Frontend Portfolio', desc: 'Motion-first visual experience', tech: 'Vite + React + TS' },
+        { name: 'Backend Portfolio', desc: 'Editorial text-dominant design', tech: 'Node.js + Express' },
+        { name: 'Frontend AI Portfolio', desc: 'Futuristic AI lab aesthetic', tech: 'Next.js + React + TS' },
+        { name: 'Senior Frontend Portfolio', desc: 'Swiss minimal design', tech: 'Next.js + React + TS' },
+        { name: 'Indie SaaS Portfolio', desc: 'This site — authentic indie hacker', tech: 'React + Vite + Tailwind' },
+        { name: 'AI Automation Portfolio', desc: 'Systems flow visualization', tech: 'Next.js + React + TS' }
+    ],
+    webApps: [
+        { name: 'Geographic Explorer', desc: 'Interactive map exploration', tech: 'React + Map APIs' },
+        { name: 'Time Display', desc: 'Beautiful timezone visualizer', tech: 'React + Canvas' },
+        { name: 'Keyboard Practice', desc: 'Typing speed trainer', tech: 'React + TypeScript' },
+        { name: 'Editorial Blog', desc: 'Content-focused blog platform', tech: 'Next.js + MDX' },
+        { name: 'Brutalist Content', desc: 'Raw, honest web design', tech: 'HTML + CSS' },
+        { name: 'AI Research', desc: 'AI paper discovery tool', tech: 'React + AI APIs' },
+        { name: 'Luxury Boutique', desc: 'High-end e-commerce UI', tech: 'React + Tailwind' },
+        { name: 'Editorial Layouts', desc: 'Magazine-style layouts', tech: 'React + Grid' },
+        { name: 'Culinary Discovery', desc: 'Recipe exploration platform', tech: 'React + PWA' },
+        { name: 'Atmospheric Dashboard', desc: 'Weather + mood dashboard', tech: 'Angular + APIs' },
+        { name: 'Viral Creator', desc: 'Content creation toolkit', tech: 'React + Canvas' },
+        { name: 'Career Navigator', desc: 'AI career guidance', tech: 'React + AI' },
+        { name: 'Enterprise Input', desc: 'Form validation system', tech: 'React + Validation' },
+        { name: 'Professional Showcase', desc: 'Portfolio template', tech: 'React + Animation' },
+        { name: 'Financial Printing', desc: 'Invoice generator', tech: 'React + PDF' },
+        { name: 'Sketch Studio', desc: 'Drawing application', tech: 'Canvas + React' }
+    ],
+    games: [
+        { name: 'Neon Highway', desc: 'Retro racing game', tech: 'Canvas + JS' },
+        { name: 'Retro Vault', desc: 'Classic arcade collection', tech: 'React + Canvas' },
+        { name: 'World Net', desc: 'Geography puzzle game', tech: 'React + SVG' },
+        { name: 'Squid Net', desc: 'Strategy survival game', tech: 'Canvas + TS' },
+        { name: 'Snake Net', desc: 'Modern snake game', tech: 'React + Hooks' },
+        { name: 'Dragon Surge', desc: 'Fantasy RPG elements', tech: 'Canvas + JS' },
+        { name: 'Maze Net', desc: 'Procedural maze generator', tech: 'React + Algorithms' },
+        { name: 'Flux Arcade', desc: 'Gaming hub platform', tech: 'TypeScript + Canvas' },
+        { name: 'Aptitude Nexus', desc: 'Brain training games', tech: 'React + PWA' },
+        { name: 'Sigma Nexus', desc: 'Strategy puzzle collection', tech: 'React + State' }
+    ],
+    tools: [
+        { name: 'QuizFlow PDF', desc: 'PDF to quiz generator', tech: 'React + PDF.js' },
+        { name: 'VaultPass', desc: 'Password generator', tech: 'Web Crypto API' },
+        { name: 'Text to Speech', desc: 'Voice synthesis tool', tech: 'Web Speech API' },
+        { name: 'Firebase File Uploader', desc: 'Cloud storage interface', tech: 'Firebase + React' },
+        { name: 'Firebase Image Uploader', desc: 'Image management tool', tech: 'Firebase + React' },
+        { name: 'React Image Uploader', desc: 'Client-side image handling', tech: 'React + Hooks' },
+        { name: 'Firebase Auth', desc: 'Authentication system', tech: 'Firebase Auth' },
+        { name: 'Facebook Login UI', desc: 'OAuth interface clone', tech: 'React + CSS' },
+        { name: 'Agency Website Clone', desc: 'Landing page recreation', tech: 'HTML + CSS' },
+        { name: 'GitHub Desktop Guide', desc: 'Git tutorial app', tech: 'React + MDX' }
+    ],
+    starters: [
+        { name: 'React Vercel Starter', desc: 'Deploy-ready React template', tech: 'React + Vercel' },
+        { name: 'Ionic React Starter', desc: 'Mobile app foundation', tech: 'Ionic + React' },
+        { name: 'Django Starter', desc: 'Python web framework', tech: 'Django + Python' },
+        { name: 'Flask Starter', desc: 'Lightweight Python backend', tech: 'Flask + Python' },
+        { name: 'JAMstack Blog', desc: 'Static site generator', tech: '11ty + Netlify' },
+        { name: 'React Boilerplate', desc: 'Production-ready setup', tech: 'React + Webpack' },
+        { name: 'CodeSandbox Starter', desc: 'Online IDE template', tech: 'React + CSB' },
+        { name: 'Hugo Blog', desc: 'Fast static generator', tech: 'Hugo + Go' },
+        { name: 'Docusaurus Docs', desc: 'Documentation site', tech: 'Docusaurus + React' },
+        { name: 'Gatsby Blog', desc: 'GraphQL-powered blog', tech: 'Gatsby + React' },
+        { name: 'Angular Web', desc: 'Enterprise starter', tech: 'Angular + TS' },
+        { name: 'Electron Desktop', desc: 'Cross-platform desktop', tech: 'Electron + React' },
+        { name: 'Python Practice', desc: 'Learning exercises', tech: 'Python' },
+        { name: 'Python Examples', desc: 'Code snippets collection', tech: 'Python' },
+        { name: 'Repo Demo', desc: 'Git showcase project', tech: 'Git + Markdown' },
+        { name: 'CADWork Internship', desc: 'Engineering project', tech: 'CAD + Documentation' }
+    ]
 };
 
-const floatingIcons = [Sparkles, Flame, Zap, Star, Heart, Play];
+const skills = {
+    'Product': ['MVP Development', 'User Research', 'Growth Hacking', 'Monetization', 'Analytics'],
+    'Frontend': ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    'Backend': ['Node.js', 'Python', 'Firebase', 'Supabase', 'PostgreSQL'],
+    'AI/ML': ['LLM Integration', 'OpenAI API', 'Prompt Engineering', 'Agent Systems']
+};
+
+const buildInPublicMetrics = [
+    { label: 'Projects Shipped', value: '60+', icon: Rocket, note: 'And counting' },
+    { label: 'Lines of Code', value: '100K+', icon: Code2, note: 'Written this year' },
+    { label: 'Coffees Consumed', value: '∞', icon: Heart, note: 'Essential fuel' },
+    { label: 'Late Nights', value: 'Many', icon: Star, note: 'Worth every one' }
+];
 
 export default function App() {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [activeFilter, setActiveFilter] = useState('All');
-    const [visibleCount, setVisibleCount] = useState(6);
-    const filters = ['All', 'Web', 'Tool'];
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
-
-    const filteredProjects = activeFilter === 'All'
-        ? selectedProjects
-        : selectedProjects.filter(p => p.category === activeFilter);
-
-    const visibleProjects = filteredProjects.slice(0, visibleCount);
-    const hasMore = filteredProjects.length > visibleCount;
+    const [activeTab, setActiveTab] = useState<'featured' | 'all'>('featured');
+    const [expandedProject, setExpandedProject] = useState<string | null>(null);
 
     return (
-        <div className="min-h-screen bg-gray-950 text-white overflow-x-hidden">
-            {/* Animated Background */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <motion.div
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        rotate: [0, 90, 0],
-                    }}
-                    transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    className="absolute top-1/4 -left-32 w-96 h-96 bg-gradient-to-br from-pink-500/20 to-purple-500/20 rounded-full blur-[100px]"
-                />
-                <motion.div
-                    animate={{
-                        scale: [1.2, 1, 1.2],
-                        rotate: [90, 0, 90],
-                    }}
-                    transition={{
-                        duration: 15,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    className="absolute bottom-1/4 -right-32 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-[100px]"
-                />
-                <motion.div
-                    animate={{
-                        x: [0, 100, 0],
-                        y: [0, -100, 0],
-                    }}
-                    transition={{
-                        duration: 10,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
-                    className="absolute top-1/2 left-1/2 w-64 h-64 bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-full blur-[80px]"
-                />
-            </div>
-
-            {/* Floating Icons */}
-            {floatingIcons.map((Icon, i) => (
-                <motion.div
-                    key={i}
-                    className="fixed pointer-events-none z-10"
-                    initial={{
-                        x: Math.random() * window.innerWidth,
-                        y: Math.random() * window.innerHeight
-                    }}
-                    animate={{
-                        y: [0, -30, 0],
-                        rotate: [0, 10, -10, 0],
-                    }}
-                    transition={{
-                        duration: 3 + i,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: i * 0.2
-                    }}
-                >
-                    <Icon className={`w-6 h-6 ${i % 2 === 0 ? 'text-pink-500/30' : 'text-cyan-500/30'}`} />
-                </motion.div>
-            ))}
-
-            {/* Mouse Follower */}
-            <motion.div
-                className="fixed w-64 h-64 rounded-full pointer-events-none z-0"
-                style={{
-                    background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 70%)',
-                    left: mousePosition.x - 128,
-                    top: mousePosition.y - 128,
-                }}
-            />
-
+        <div className="min-h-screen bg-amber-50">
             {/* Navigation */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-950/50 backdrop-blur-xl">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                    <motion.div
-                        animate={{ rotate: [0, 360] }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                        className="w-10 h-10 bg-gradient-to-br from-pink-500 to-violet-500 rounded-xl flex items-center justify-center"
-                    >
-                        <Sparkles className="w-5 h-5" />
-                    </motion.div>
-                    <div className="flex items-center gap-6">
-                        {['About', 'Products', 'Work', 'Resume', 'Contact'].map((item, i) => (
-                            <motion.a
+            <nav className="fixed top-0 left-0 right-0 z-50 bg-amber-50/90 backdrop-blur-md border-b border-stone-200">
+                <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                    <a href="#" className="flex items-center gap-2 group">
+                        <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12">
+                            <Rocket className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="font-serif font-bold text-xl text-stone-800">KM</span>
+                    </a>
+                    <div className="hidden md:flex items-center gap-8">
+                        {['Story', 'Products', 'Projects', 'Skills', 'Contact'].map((item) => (
+                            <a
                                 key={item}
                                 href={`#${item.toLowerCase()}`}
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.1 }}
-                                whileHover={{ scale: 1.1 }}
-                                className="text-sm text-gray-400 hover:text-white transition-colors relative group"
+                                className="text-stone-600 hover:text-amber-600 font-medium transition-colors"
                             >
                                 {item}
-                                <motion.span
-                                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-pink-500 to-violet-500"
-                                    initial={{ scaleX: 0 }}
-                                    whileHover={{ scaleX: 1 }}
-                                />
-                            </motion.a>
+                            </a>
                         ))}
-                        <motion.a
-                            href="https://github.com/mk-knight23"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                        >
-                            <Github className="w-5 h-5" />
-                        </motion.a>
                     </div>
+                    <a
+                        href="https://github.com/mk-knight23"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 hover:bg-stone-100 rounded-lg transition-colors"
+                    >
+                        <Github className="w-5 h-5 text-stone-600" />
+                    </a>
                 </div>
             </nav>
 
-            <main className="pt-32 pb-16 max-w-7xl mx-auto px-6 relative z-10">
-                {/* Hero */}
-                <section className="min-h-[70vh] flex items-center justify-center text-center py-20">
+            <main className="pt-24 pb-16">
+                {/* Hero Section */}
+                <section className="max-w-6xl mx-auto px-6 py-20 md:py-32">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="max-w-4xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="max-w-3xl"
                     >
-                        <motion.div
-                            animate={{
-                                y: [0, -10, 0],
-                            }}
-                            transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500/20 to-violet-500/20 border border-pink-500/30 rounded-full text-pink-400 text-sm font-medium mb-8"
-                        >
-                            <Sparkles className="w-4 h-4" />
-                            Indie Builder & SaaS Developer
-                        </motion.div>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-medium mb-8">
+                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            Building in Public — Hyderabad, India
+                        </div>
 
-                        <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="text-6xl md:text-8xl font-bold mb-6 tracking-tight"
-                        >
-                            <span className="inline-block">
-                                <motion.span
-                                    animate={{ color: ['#fff', '#ec4899', '#8b5cf6', '#fff'] }}
-                                    transition={{ duration: 4, repeat: Infinity }}
-                                >
-                                    KAZI
-                                </motion.span>
-                            </span>
-                            {' '}
-                            <span className="inline-block">
-                                <motion.span
-                                    animate={{ color: ['#6b7280', '#06b6d4', '#ec4899', '#6b7280'] }}
-                                    transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-                                >
-                                    MUSHARRAF
-                                </motion.span>
-                            </span>
-                        </motion.h1>
+                        <h1 className="text-5xl md:text-7xl font-bold text-stone-900 mb-6 leading-tight">
+                            Indie founder
+                            <br />
+                            <span className="scribble-underline">shipping products</span>
+                        </h1>
 
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.4 }}
-                            className="text-xl text-gray-400 leading-relaxed mb-10 max-w-2xl mx-auto"
-                        >
-                            Crafting <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500 font-semibold">
-                                delightful digital experiences
-                            </span> with motion, color, and intention.
-                            Currently architecting the AI-VIBE-ECOSYSTEM v2.0.
-                        </motion.p>
+                        <p className="text-xl text-stone-600 mb-8 leading-relaxed max-w-2xl">
+                            Hey, I'm Kazi. I build SaaS products and tools that solve real problems.
+                            60+ projects shipped. Currently working on{' '}
+                            <span className="font-semibold text-amber-700">AI-VIBE-ECOSYSTEM v2.0</span> —
+                            a multi-agent platform for developers who want to ship faster.
+                        </p>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 }}
-                            className="flex flex-wrap justify-center gap-4"
-                        >
-                            <motion.a
-                                href="#products"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-violet-500 rounded-xl font-medium flex items-center gap-2"
-                            >
-                                Explore Magic
-                                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            </motion.a>
-                            <motion.a
-                                href="#work"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-medium transition-all"
-                            >
-                                See Creations
-                            </motion.a>
-                        </motion.div>
-                    </motion.div>
-                </section>
-
-                {/* Animated Stats */}
-                <section className="grid grid-cols-4 gap-6 mb-24">
-                    {[
-                        { value: '60+', label: 'Projects', icon: Sparkles, color: 'from-pink-500 to-rose-500' },
-                        { value: '05', label: 'Products', icon: Star, color: 'from-violet-500 to-purple-500' },
-                        { value: '∞', label: 'Ideas', icon: Flame, color: 'from-amber-500 to-orange-500' },
-                        { value: '❤️', label: 'Passion', icon: Heart, color: 'from-rose-500 to-red-500' }
-                    ].map((stat, i) => (
-                        <motion.div
-                            key={stat.label}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.1, type: "spring" }}
-                            whileHover={{ scale: 1.05, rotate: [0, -2, 2, 0] }}
-                            className="p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl text-center relative overflow-hidden group"
-                        >
-                            <motion.div
-                                className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity`}
-                            />
-                            <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                className="relative z-10"
-                            >
-                                <stat.icon className={`w-8 h-8 bg-gradient-to-br ${stat.color} p-1.5 rounded-2xl mx-auto mb-3`} />
-                            </motion.div>
-                            <div className="text-4xl font-bold mb-1 relative z-10">{stat.value}</div>
-                            <div className="text-sm text-gray-500 relative z-10">{stat.label}</div>
-                        </motion.div>
-                    ))}
-                </section>
-
-                {/* About */}
-                <section id="about" className="mb-24">
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ type: "spring" }}
-                        className="p-10 bg-gradient-to-br from-pink-500/10 to-violet-500/10 border border-white/10 rounded-3xl relative overflow-hidden"
-                    >
-                        <motion.div
-                            animate={{
-                                scale: [1, 1.1, 1],
-                                rotate: [0, 5, -5, 0],
-                            }}
-                            transition={{
-                                duration: 8,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-pink-500/20 to-violet-500/20 rounded-full blur-3xl"
-                        />
-                        <h2 className="text-3xl font-bold mb-6 relative z-10">✨ About Me</h2>
-                        <div className="grid md:grid-cols-2 gap-8 text-gray-300 relative z-10">
-                            <p className="text-lg leading-relaxed">
-                                I'm a <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500 font-semibold">Creative Developer</span> who believes in the power of
-                                <strong className="text-white"> motion</strong>,
-                                <strong className="text-white"> color</strong>, and
-                                <strong className="text-white"> playfulness</strong> in digital experiences.
-                            </p>
-                            <p className="text-lg leading-relaxed">
-                                Currently crafting <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 font-semibold">VIBE Ecosystem</span> —
-                                a suite of AI-powered developer tools. Every project is an opportunity to create something delightful.
-                            </p>
+                        <div className="flex flex-wrap gap-4">
+                            <a href="#products" className="btn-primary">
+                                See What I'm Building
+                                <ArrowUpRight className="w-4 h-4" />
+                            </a>
+                            <a href="https://github.com/mk-knight23" target="_blank" rel="noopener" className="btn-secondary">
+                                <Github className="w-4 h-4" />
+                                GitHub
+                            </a>
                         </div>
                     </motion.div>
-                </section>
 
-                {/* Products */}
-                <section id="products" className="mb-24">
+                    {/* Build in Public Stats */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                        className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16"
                     >
-                        <div className="flex items-center gap-4 mb-10">
-                            <motion.div
-                                animate={{ rotate: [0, 360] }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                className="p-2 bg-gradient-to-br from-pink-500 to-violet-500 rounded-xl"
-                            >
-                                <Sparkles className="w-5 h-5" />
-                            </motion.div>
-                            <h2 className="text-3xl font-bold">AI-VIBE-ECOSYSTEM v2.0</h2>
-                        </div>
+                        {buildInPublicMetrics.map((metric, i) => (
+                            <div key={metric.label} className="indie-card text-center">
+                                <metric.icon className="w-6 h-6 text-amber-500 mx-auto mb-2" />
+                                <div className="text-3xl font-bold text-stone-800">{metric.value}</div>
+                                <div className="text-sm font-medium text-stone-600">{metric.label}</div>
+                                <div className="text-xs text-stone-400 mt-1">{metric.note}</div>
+                            </div>
+                        ))}
+                    </motion.div>
+                </section>
 
-                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {vibeProducts.map((product, i) => (
+                {/* Story / About Section */}
+                <section id="story" className="max-w-6xl mx-auto px-6 py-20">
+                    <div className="grid md:grid-cols-2 gap-12 items-center">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                        >
+                            <div className="section-divider mb-6"></div>
+                            <h2 className="text-4xl font-bold text-stone-900 mb-6">The Story So Far</h2>
+                            <div className="space-y-4 text-stone-600 leading-relaxed">
+                                <p>
+                                    I started coding because I wanted to build things that mattered.
+                                    Not just tutorials or side projects — real products that real people could use.
+                                </p>
+                                <p>
+                                    After joining <strong className="text-stone-800">Wipro</strong> as a Project Engineer,
+                                    I realized the 9-to-5 wasn't enough. I wanted to create, to ship, to iterate in public.
+                                    So I started building.
+                                </p>
+                                <p>
+                                    60 projects later, I've learned that shipping beats perfection.
+                                    Every project taught me something — about code, about users, about myself.
+                                    Some failed. Some stuck. All moved me forward.
+                                </p>
+                                <p className="text-amber-700 font-medium">
+                                    Now I'm focused on AI-powered developer tools that help others ship faster.
+                                    Because the best products are built by people who understand the struggle.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="relative"
+                        >
+                            <div className="indie-card bg-gradient-to-br from-amber-100 to-orange-50">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
+                                        <Terminal className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-stone-800">Current Focus</div>
+                                        <div className="text-sm text-stone-500">AI-VIBE-ECOSYSTEM v2.0</div>
+                                    </div>
+                                </div>
+                                <ul className="space-y-3">
+                                    {[
+                                        'Multi-agent AI workflow orchestration',
+                                        'CLI tool for AI-powered development',
+                                        'Chat interface for agent management',
+                                        'Web builder with AI assistance'
+                                    ].map((item, i) => (
+                                        <li key={i} className="flex items-start gap-2 text-sm text-stone-600">
+                                            <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="indie-card mt-4 bg-white">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <MapPin className="w-4 h-4 text-stone-400" />
+                                    <span className="text-sm text-stone-600">Hyderabad, India</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Briefcase className="w-4 h-4 text-stone-400" />
+                                    <span className="text-sm text-stone-600">Project Engineer at Wipro</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </section>
+
+                {/* Featured Products Section */}
+                <section id="products" className="bg-white py-20">
+                    <div className="max-w-6xl mx-auto px-6">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-center mb-12"
+                        >
+                            <div className="section-divider mx-auto mb-6"></div>
+                            <h2 className="text-4xl font-bold text-stone-900 mb-4">Featured Products</h2>
+                            <p className="text-stone-600 max-w-2xl mx-auto">
+                                The 8 projects I'm most proud of. Each one solved a real problem,
+                                taught me something new, and pushed me to be a better builder.
+                            </p>
+                        </motion.div>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                            {featuredProjects.map((project, i) => (
                                 <motion.div
-                                    key={product.name}
-                                    initial={{ opacity: 0, y: 50, rotate: -5 }}
-                                    whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-                                    transition={{ delay: i * 0.15, type: "spring" }}
+                                    key={project.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    whileHover={{ scale: 1.05, y: -10 }}
-                                    className="group relative"
+                                    transition={{ delay: i * 0.1 }}
+                                    className="indie-card group cursor-pointer"
+                                    onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
                                 >
-                                    <div className={`p-6 bg-gradient-to-br ${product.color} rounded-3xl relative overflow-hidden`}>
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                                        <motion.div
-                                            animate={{ y: [0, -5, 0] }}
-                                            transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-                                            className="relative z-10"
-                                        >
-                                            <div className="p-3 bg-white/20 backdrop-blur rounded-2xl w-fit mb-4">
-                                                <product.icon className="w-6 h-6 text-white" />
-                                            </div>
-                                        </motion.div>
-                                        <h3 className="font-bold text-lg mb-1 relative z-10">{product.name}</h3>
-                                        <p className="text-white/80 text-sm mb-3 relative z-10">{product.tagline}</p>
-                                        <span className={`text-xs px-3 py-1 rounded-full font-medium ${product.status === 'Live' ? 'bg-green-400/30 text-green-100' : 'bg-white/20 text-white/80'
-                                            }`}>
-                                            {product.status}
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${project.color} flex items-center justify-center`}>
+                                            <project.icon className="w-6 h-6 text-white" />
+                                        </div>
+                                        <span className={`tag ${project.status === 'Live' ? 'tag-green' : 'tag-amber'}`}>
+                                            {project.status}
                                         </span>
                                     </div>
+
+                                    <h3 className="text-xl font-bold text-stone-900 mb-1 group-hover:text-amber-600 transition-colors">
+                                        {project.name}
+                                    </h3>
+                                    <p className="text-amber-700 font-medium text-sm mb-2">{project.tagline}</p>
+                                    <p className="text-stone-600 text-sm mb-4">{project.description}</p>
+
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {project.tech.map((t) => (
+                                            <span key={t} className="tag tag-stone">{t}</span>
+                                        ))}
+                                    </div>
+
+                                    <a
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-sm font-medium text-stone-500 hover:text-amber-600 transition-colors"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <Github className="w-4 h-4" />
+                                        View on GitHub
+                                        <ExternalLink className="w-3 h-3" />
+                                    </a>
                                 </motion.div>
                             ))}
                         </div>
-                    </motion.div>
+                    </div>
                 </section>
 
-                {/* Projects Gallery */}
-                <section id="work" className="mb-24">
+                {/* All Projects Section */}
+                <section id="projects" className="max-w-6xl mx-auto px-6 py-20">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
+                        className="text-center mb-12"
                     >
-                        <h2 className="text-3xl font-bold mb-8">🎨 Creative Projects</h2>
+                        <div className="section-divider mx-auto mb-6"></div>
+                        <h2 className="text-4xl font-bold text-stone-900 mb-4">All 60 Projects</h2>
+                        <p className="text-stone-600 max-w-2xl mx-auto">
+                            Every project I've built, organized by category. Each one taught me something.
+                            Some are polished. Some are experiments. All represent hours of learning.
+                        </p>
+                    </motion.div>
 
-                        {/* Filter */}
-                        <div className="flex gap-3 mb-10">
-                            {filters.map(filter => (
-                                <motion.button
-                                    key={filter}
-                                    onClick={() => setActiveFilter(filter)}
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className={`px-6 py-3 rounded-xl text-sm font-medium transition-all ${activeFilter === filter
-                                        ? 'bg-gradient-to-r from-pink-500 to-violet-500 text-white'
-                                        : 'bg-white/5 text-gray-400 hover:text-white'
-                                        }`}
-                                >
-                                    {filter}
-                                </motion.button>
-                            ))}
-                        </div>
-
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <AnimatePresence>
-                                {visibleProjects.map((project, i) => (
-                                    <motion.div
-                                        key={project.name}
-                                        initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                                        exit={{ opacity: 0, scale: 0.8 }}
-                                        transition={{ delay: i * 0.1, type: "spring" }}
-                                        whileHover={{ scale: 1.05, y: -10 }}
-                                        className="group cursor-pointer"
-                                    >
-                                        <motion.div
-                                            animate={{ rotate: [0, 2, -2, 0] }}
-                                            transition={{ duration: 4, repeat: Infinity, delay: i * 0.5 }}
-                                            className={`h-56 rounded-3xl bg-gradient-to-br ${project.color} p-6 relative overflow-hidden mb-4`}
-                                        >
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                                            <span className="text-5xl">{project.emoji}</span>
-                                            <div className="absolute bottom-4 right-4 opacity-30">
-                                                <Sparkles className="w-16 h-16 text-white" />
-                                            </div>
-                                        </motion.div>
-                                        <h3 className="font-bold text-xl mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-violet-500 transition-all">
-                                            {project.name}
-                                        </h3>
-                                        <div className="flex items-center gap-2">
-                                            <span className={`px-2 py-0.5 rounded-full text-xs ${project.category === 'Web' ? 'bg-fuchsia-500/30 text-fuchsia-300' : 'bg-amber-500/30 text-amber-300'
-                                                }`}>
-                                                {project.category}
-                                            </span>
-                                            <span className="text-sm text-gray-500">{project.tech}</span>
-                                        </div>
-                                    </motion.div>
+                    <div className="space-y-12">
+                        {/* Portfolios */}
+                        <div>
+                            <h3 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
+                                <Layers className="w-6 h-6 text-amber-500" />
+                                Portfolios (8)
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {allProjects.portfolios.map((p, i) => (
+                                    <div key={i} className="indie-card p-4">
+                                        <div className="font-medium text-stone-800 mb-1">{p.name}</div>
+                                        <div className="text-xs text-stone-500 mb-2">{p.desc}</div>
+                                        <div className="tag tag-stone text-xs">{p.tech}</div>
+                                    </div>
                                 ))}
-                            </AnimatePresence>
+                            </div>
                         </div>
 
-                        {/* Load More / View All */}
-                        {hasMore ? (
-                            <motion.button
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                onClick={() => setVisibleCount(prev => prev + 3)}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="mt-8 px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-medium transition-all flex items-center gap-2 mx-auto"
-                            >
-                                Load More Projects
-                                <ArrowUpRight className="w-4 h-4" />
-                            </motion.button>
-                        ) : (
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="mt-8 text-center text-gray-500 text-sm"
-                            >
-                                Showing {visibleProjects.length} of {filteredProjects.length} projects
-                            </motion.p>
-                        )}
+                        {/* Web Apps */}
+                        <div>
+                            <h3 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
+                                <Globe className="w-6 h-6 text-amber-500" />
+                                Web Apps (16)
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {allProjects.webApps.map((p, i) => (
+                                    <div key={i} className="indie-card p-4">
+                                        <div className="font-medium text-stone-800 mb-1">{p.name}</div>
+                                        <div className="text-xs text-stone-500 mb-2">{p.desc}</div>
+                                        <div className="tag tag-stone text-xs">{p.tech}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
-                        <motion.a
+                        {/* Games */}
+                        <div>
+                            <h3 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
+                                <Gamepad2 className="w-6 h-6 text-amber-500" />
+                                Games (10)
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                                {allProjects.games.map((p, i) => (
+                                    <div key={i} className="indie-card p-4">
+                                        <div className="font-medium text-stone-800 mb-1">{p.name}</div>
+                                        <div className="text-xs text-stone-500 mb-2">{p.desc}</div>
+                                        <div className="tag tag-stone text-xs">{p.tech}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Tools */}
+                        <div>
+                            <h3 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
+                                <Zap className="w-6 h-6 text-amber-500" />
+                                Tools (10)
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                                {allProjects.tools.map((p, i) => (
+                                    <div key={i} className="indie-card p-4">
+                                        <div className="font-medium text-stone-800 mb-1">{p.name}</div>
+                                        <div className="text-xs text-stone-500 mb-2">{p.desc}</div>
+                                        <div className="tag tag-stone text-xs">{p.tech}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Starters */}
+                        <div>
+                            <h3 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
+                                <Code2 className="w-6 h-6 text-amber-500" />
+                                Starters (16)
+                            </h3>
+                            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {allProjects.starters.map((p, i) => (
+                                    <div key={i} className="indie-card p-4">
+                                        <div className="font-medium text-stone-800 mb-1">{p.name}</div>
+                                        <div className="text-xs text-stone-500 mb-2">{p.desc}</div>
+                                        <div className="tag tag-stone text-xs">{p.tech}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="text-center mt-12">
+                        <a
                             href="https://github.com/mk-knight23?tab=repositories"
                             target="_blank"
                             rel="noopener noreferrer"
-                            whileHover={{ scale: 1.05 }}
-                            className="inline-flex items-center gap-2 mt-6 text-pink-400 hover:text-pink-300 transition-colors"
+                            className="btn-secondary"
                         >
-                            View all 60+ projects on GitHub <ExternalLink className="w-4 h-4" />
-                        </motion.a>
-                    </motion.div>
+                            <Github className="w-4 h-4" />
+                            View All on GitHub
+                            <ExternalLink className="w-4 h-4" />
+                        </a>
+                    </div>
                 </section>
 
-                {/* Skills */}
-                <section id="skills" className="mb-24">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-3xl font-bold mb-10">⚡ Superpowers</h2>
+                {/* Skills Section */}
+                <section id="skills" className="bg-stone-900 text-stone-100 py-20">
+                    <div className="max-w-6xl mx-auto px-6">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="text-center mb-12"
+                        >
+                            <h2 className="text-4xl font-bold mb-4">Skills & Expertise</h2>
+                            <p className="text-stone-400 max-w-2xl mx-auto">
+                                The tools and technologies I use to bring ideas to life.
+                                Always learning, always shipping.
+                            </p>
+                        </motion.div>
 
-                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {Object.entries(skillsByCategory).map(([category, skills], i) => (
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {Object.entries(skills).map(([category, skillList], i) => (
                                 <motion.div
                                     key={category}
-                                    initial={{ opacity: 0, y: 30 }}
+                                    initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1, type: "spring" }}
                                     viewport={{ once: true }}
-                                    whileHover={{ scale: 1.03, rotate: [0, 2, -2, 0] }}
-                                    className="p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl group"
+                                    transition={{ delay: i * 0.1 }}
+                                    className="bg-stone-800 rounded-2xl p-6 border border-stone-700"
                                 >
-                                    <motion.div
-                                        animate={{ y: [0, -5, 0] }}
-                                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-                                        className="mb-4"
-                                    >
-                                        <span className="text-4xl">{category === 'Magic Stack' ? '🪄' : category === 'Creative Tools' ? '🎨' : category === 'Backend' ? '⚙️' : '🔬'}</span>
-                                    </motion.div>
-                                    <h3 className="font-bold mb-4">{category}</h3>
+                                    <h3 className="text-lg font-bold text-amber-400 mb-4">{category}</h3>
                                     <div className="flex flex-wrap gap-2">
-                                        {skills.map(skill => (
-                                            <motion.span
+                                        {skillList.map((skill) => (
+                                            <span
                                                 key={skill}
-                                                whileHover={{ scale: 1.1 }}
-                                                className="px-3 py-1.5 bg-gradient-to-r from-pink-500/20 to-violet-500/20 text-pink-300 rounded-full text-sm"
+                                                className="px-3 py-1 bg-stone-700 text-stone-300 rounded-full text-sm"
                                             >
                                                 {skill}
-                                            </motion.span>
+                                            </span>
                                         ))}
                                     </div>
                                 </motion.div>
                             ))}
                         </div>
-                    </motion.div>
+                    </div>
                 </section>
 
-                {/* Resume */}
-                <section id="resume" className="mb-24">
+                {/* Resume Section */}
+                <section className="max-w-6xl mx-auto px-6 py-20">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                     >
-                        <div className="flex items-center gap-4 mb-10">
-                            <motion.div
-                                animate={{ rotate: [0, 360] }}
-                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                className="p-2 bg-gradient-to-br from-pink-500 to-violet-500 rounded-xl"
-                            >
-                                <Sparkles className="w-5 h-5" />
-                            </motion.div>
-                            <h2 className="text-3xl font-bold">Resume</h2>
-                        </div>
-                        <p className="text-gray-400 mb-10 text-lg">Indie Builder & SaaS Developer</p>
+                        <div className="section-divider mb-6"></div>
+                        <h2 className="text-4xl font-bold text-stone-900 mb-12">Resume</h2>
 
-                        <div className="grid lg:grid-cols-3 gap-8">
-                            {/* Main Content */}
-                            <div className="lg:col-span-2 space-y-8">
+                        <div className="grid md:grid-cols-3 gap-8">
+                            <div className="md:col-span-2 space-y-8">
                                 {/* Experience */}
-                                <motion.div
-                                    whileHover={{ scale: 1.01 }}
-                                    className="p-8 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl"
-                                >
-                                    <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-                                        <span className="text-2xl">💼</span> Experience
+                                <div className="indie-card">
+                                    <h3 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
+                                        <Briefcase className="w-5 h-5 text-amber-500" />
+                                        Experience
                                     </h3>
-                                    <div className="space-y-4">
-                                        <div className="pl-6 border-l-2 border-pink-500/50">
-                                            <div className="flex items-start justify-between mb-2">
-                                                <h4 className="text-xl font-semibold">Project Engineer (TURBO)</h4>
-                                                <span className="text-sm text-gray-500 font-medium">Jul 2022 – Present</span>
+                                    <div className="space-y-6">
+                                        <div className="border-l-2 border-amber-300 pl-6">
+                                            <div className="flex flex-wrap justify-between items-start mb-2">
+                                                <h4 className="text-lg font-bold text-stone-800">Project Engineer (TURBO)</h4>
+                                                <span className="text-sm text-stone-500">Jul 2022 – Present</span>
                                             </div>
-                                            <p className="text-pink-400 font-medium mb-2">Wipro</p>
-                                            <p className="text-gray-400 leading-relaxed">
-                                                Building full-stack SaaS products and indie apps. Specialized in React,
-                                                Next.js, and end-to-end product development. Shipped 80+ projects including
-                                                the VIBE Ecosystem and multiple AI-powered tools.
+                                            <p className="text-amber-700 font-medium mb-2">Wipro</p>
+                                            <p className="text-stone-600 text-sm leading-relaxed">
+                                                Building full-stack SaaS products and internal tools.
+                                                Specialized in React, Next.js, and AI integration.
+                                                Led development of multiple client projects from concept to deployment.
                                             </p>
                                         </div>
                                     </div>
-                                </motion.div>
+                                </div>
 
                                 {/* Education */}
-                                <motion.div
-                                    whileHover={{ scale: 1.01 }}
-                                    className="p-8 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl"
-                                >
-                                    <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-                                        <span className="text-2xl">🎓</span> Education
+                                <div className="indie-card">
+                                    <h3 className="text-lg font-bold text-stone-800 mb-6 flex items-center gap-2">
+                                        <GraduationCap className="w-5 h-5 text-amber-500" />
+                                        Education
                                     </h3>
-                                    <div className="pl-6 border-l-2 border-violet-500/50">
-                                        <div className="flex items-start justify-between mb-2">
-                                            <h4 className="text-xl font-semibold">B.Tech Computer Science & Engineering</h4>
-                                            <span className="text-sm text-gray-500 font-medium">2022</span>
+                                    <div className="border-l-2 border-amber-300 pl-6">
+                                        <div className="flex flex-wrap justify-between items-start mb-2">
+                                            <h4 className="text-lg font-bold text-stone-800">B.Tech Computer Science</h4>
+                                            <span className="text-sm text-stone-500">2022</span>
                                         </div>
+                                        <p className="text-stone-600 text-sm">Focus on software engineering and web technologies</p>
                                     </div>
-                                </motion.div>
+                                </div>
                             </div>
 
                             {/* Sidebar */}
-                            <div className="space-y-8">
-                                {/* Tech Stack */}
-                                <motion.div
-                                    whileHover={{ scale: 1.02, rotate: [0, 2, -2, 0] }}
-                                    className="p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl"
-                                >
-                                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                                        <span className="text-xl">🪄</span> Tech Stack
-                                    </h3>
-                                    <div className="space-y-3">
-                                        <div>
-                                            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Full Stack</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {['React', 'Next.js', 'TypeScript', 'Vue', 'Tailwind'].map((tech) => (
-                                                    <span key={tech} className="px-2 py-1 bg-gradient-to-r from-pink-500/20 to-violet-500/20 text-pink-300 rounded text-sm">
-                                                        {tech}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Backend</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {['Node.js', 'Supabase', 'Prisma', 'Edge Functions'].map((tech) => (
-                                                    <span key={tech} className="px-2 py-1 bg-gradient-to-r from-pink-500/20 to-violet-500/20 text-pink-300 rounded text-sm">
-                                                        {tech}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </motion.div>
+                            <div className="space-y-6">
+                                <div className="indie-card bg-gradient-to-br from-amber-50 to-orange-50">
+                                    <h3 className="font-bold text-stone-800 mb-4">Quick Facts</h3>
+                                    <ul className="space-y-3 text-sm">
+                                        <li className="flex items-center gap-2 text-stone-600">
+                                            <MapPin className="w-4 h-4 text-amber-500" />
+                                            Hyderabad, India
+                                        </li>
+                                        <li className="flex items-center gap-2 text-stone-600">
+                                            <Calendar className="w-4 h-4 text-amber-500" />
+                                            3+ years shipping
+                                        </li>
+                                        <li className="flex items-center gap-2 text-stone-600">
+                                            <Rocket className="w-4 h-4 text-amber-500" />
+                                            60+ projects shipped
+                                        </li>
+                                    </ul>
+                                </div>
 
-                                {/* Connect */}
-                                <motion.div
-                                    whileHover={{ scale: 1.02 }}
-                                    className="p-6 bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-3xl"
-                                >
-                                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                                        <span className="text-xl">🔗</span> Connect
-                                    </h3>
+                                <div className="indie-card">
+                                    <h3 className="font-bold text-stone-800 mb-4">Connect</h3>
                                     <div className="space-y-3">
                                         <a href="https://github.com/mk-knight23" target="_blank" rel="noopener"
-                                            className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition-colors">
+                                            className="flex items-center gap-2 text-stone-600 hover:text-amber-600 transition-colors">
                                             <Github className="w-4 h-4" />
                                             <span className="text-sm">github.com/mk-knight23</span>
                                         </a>
-                                        <a href="https://www.linkedin.com/in/kazi-musharraf-0674871a4" target="_blank" rel="noopener"
-                                            className="flex items-center gap-2 text-gray-400 hover:text-pink-400 transition-colors">
+                                        <a href="https://linkedin.com/in/kazi-musharraf" target="_blank" rel="noopener"
+                                            className="flex items-center gap-2 text-stone-600 hover:text-amber-600 transition-colors">
                                             <Linkedin className="w-4 h-4" />
                                             <span className="text-sm">linkedin.com/in/kazi-musharraf</span>
                                         </a>
+                                        <a href="mailto:mk.knight970@gmail.com"
+                                            className="flex items-center gap-2 text-stone-600 hover:text-amber-600 transition-colors">
+                                            <Mail className="w-4 h-4" />
+                                            <span className="text-sm">mk.knight970@gmail.com</span>
+                                        </a>
                                     </div>
-                                </motion.div>
+                                </div>
                             </div>
                         </div>
                     </motion.div>
                 </section>
 
-                {/* What I'll Build */}
-                <section id="what-ill-build" className="mb-24">
+                {/* Contact Section */}
+                <section id="contact" className="max-w-6xl mx-auto px-6 py-20">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="p-10 bg-gradient-to-br from-pink-500/10 via-violet-500/10 to-cyan-500/10 border border-white/10 rounded-3xl relative overflow-hidden"
+                        className="indie-card bg-gradient-to-br from-amber-100 to-orange-50 text-center py-16"
                     >
-                        <motion.div
-                            animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
-                            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute -top-20 -right-20 w-64 h-64 bg-gradient-to-br from-pink-500/20 to-violet-500/20 rounded-full blur-3xl"
-                        />
-
-                        <div className="relative z-10">
-                            <motion.div
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ duration: 3, repeat: Infinity }}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500/20 to-violet-500/20 border border-pink-500/30 rounded-full text-pink-400 text-sm font-medium mb-6"
-                            >
-                                <Sparkles className="w-4 h-4" />
-                                If You Hire Me
-                            </motion.div>
-                            <h2 className="text-3xl font-bold mb-4">What I’ll Build ✨</h2>
-                            <p className="text-gray-400 mb-10 text-lg max-w-2xl">First 3–6 months as your Indie Builder & SaaS Developer</p>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <motion.div
-                                    whileHover={{ scale: 1.02, y: -5 }}
-                                    className="p-6 bg-white/5 border border-white/10 rounded-2xl"
-                                >
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <span className="text-2xl">🚀</span>
-                                        <h3 className="font-bold">Product MVP</h3>
-                                    </div>
-                                    <p className="text-gray-400 text-sm leading-relaxed">
-                                        Ship a functional MVP in 4-6 weeks. Focus on core value proposition,
-                                        user feedback loops, and iterative improvement based on real usage data.
-                                    </p>
-                                </motion.div>
-
-                                <motion.div
-                                    whileHover={{ scale: 1.02, y: -5 }}
-                                    className="p-6 bg-white/5 border border-white/10 rounded-2xl"
-                                >
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <span className="text-2xl">⚡</span>
-                                        <h3 className="font-bold">Growth Features</h3>
-                                    </div>
-                                    <p className="text-gray-400 text-sm leading-relaxed">
-                                        Build viral loops, onboarding flows, and retention features.
-                                        Implement analytics to understand user behavior and optimize conversion.
-                                    </p>
-                                </motion.div>
-
-                                <motion.div
-                                    whileHover={{ scale: 1.02, y: -5 }}
-                                    className="p-6 bg-white/5 border border-white/10 rounded-2xl"
-                                >
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <span className="text-2xl">💎</span>
-                                        <h3 className="font-bold">Monetization</h3>
-                                    </div>
-                                    <p className="text-gray-400 text-sm leading-relaxed">
-                                        Design pricing strategy, implement payment integrations,
-                                        and build tiered feature sets. Focus on LTV and churn reduction.
-                                    </p>
-                                </motion.div>
-
-                                <motion.div
-                                    whileHover={{ scale: 1.02, y: -5 }}
-                                    className="p-6 bg-white/5 border border-white/10 rounded-2xl"
-                                >
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <span className="text-2xl">🔮</span>
-                                        <h3 className="font-bold">AI Integration</h3>
-                                    </div>
-                                    <p className="text-gray-400 text-sm leading-relaxed">
-                                        Add AI features that create real value — smart recommendations,
-                                        content generation, or automation. No hype, just measurable impact.
-                                    </p>
-                                </motion.div>
-                            </div>
-                        </div>
-                    </motion.div>
-                </section>
-
-                {/* vNext: Growth Metrics Section (SaaS Credibility) */}
-                <section id="metrics" className="mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <div className="flex items-center gap-3 mb-6">
-                            <span className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full text-sm font-bold">
-                                Build in Public
-                            </span>
-                        </div>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-4">Growth & Metrics</h2>
-                        <p className="text-gray-400 mb-12 text-lg max-w-2xl">
-                            Honest numbers from the AI-VIBE-ECOSYSTEM v2.0 build. No inflated metrics, real progress.
+                        <h2 className="text-4xl font-bold text-stone-900 mb-4">Let's Build Together</h2>
+                        <p className="text-stone-600 max-w-xl mx-auto mb-8">
+                            Have an idea? Want to collaborate? Or just want to chat about indie hacking?
+                            I'm always open to interesting conversations.
                         </p>
 
-                        <div className="grid md:grid-cols-3 gap-6">
-                            <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-center">
-                                <div className="text-5xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-2">
-                                    4
-                                </div>
-                                <p className="text-gray-300 font-semibold mb-1">Products in Roadmap</p>
-                                <p className="text-gray-500 text-sm">Automation • CLI • Chat • Builder • VSCode</p>
-                            </div>
-
-                            <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-center">
-                                <div className="text-5xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                                    60+
-                                </div>
-                                <p className="text-gray-300 font-semibold mb-1">Competitors Analyzed</p>
-                                <p className="text-gray-500 text-sm">Market research complete</p>
-                            </div>
-
-                            <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-center">
-                                <div className="text-5xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent mb-2">
-                                    55
-                                </div>
-                                <p className="text-gray-300 font-semibold mb-1">Features Planned</p>
-                                <p className="text-gray-500 text-sm">4-tier prompt strategy</p>
-                            </div>
-                        </div>
-
-                        <div className="mt-8 p-6 bg-white/5 border border-white/10 rounded-2xl">
-                            <p className="text-gray-400 text-sm text-center">
-                                <span className="text-emerald-400 font-semibold">📈 Building in public</span> —
-                                Documenting progress, learning in public, iterating based on feedback.
-                                No fake revenue charts, just real product development.
-                            </p>
-                        </div>
-                    </motion.div>
-                </section>
-
-                {/* Contact */}
-                <section id="contact" className="mb-20">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="p-12 bg-gradient-to-br from-pink-500/20 via-violet-500/20 to-cyan-500/20 border border-white/10 rounded-3xl text-center relative overflow-hidden"
-                    >
-                        <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                            className="absolute -top-32 -left-32 w-64 h-64 bg-gradient-to-br from-pink-500/30 to-violet-500/30 rounded-full blur-3xl"
-                        />
-                        <motion.div
-                            animate={{ rotate: -360 }}
-                            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                            className="absolute -bottom-32 -right-32 w-64 h-64 bg-gradient-to-br from-cyan-500/30 to-blue-500/30 rounded-full blur-3xl"
-                        />
-
-                        <div className="relative z-10">
-                            <motion.div
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ duration: 3, repeat: Infinity }}
-                            >
-                                <h2 className="text-4xl font-bold mb-6">Let's Create Magic ✨</h2>
-                            </motion.div>
-                            <p className="text-gray-300 mb-10 max-w-xl mx-auto text-lg">
-                                Always excited to collaborate on creative projects, innovative ideas, and delightful experiences.
-                            </p>
-
-                            <div className="flex flex-wrap justify-center gap-4">
-                                <motion.a
-                                    href="mailto:mk.knight970@gmail.com"
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="group px-8 py-4 bg-gradient-to-r from-pink-500 to-violet-500 rounded-xl font-medium flex items-center gap-2"
-                                >
-                                    <Mail className="w-5 h-5" /> Say Hello
-                                </motion.a>
-                                <motion.a
-                                    href="https://github.com/mk-knight23"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    whileHover={{ scale: 1.05, rotate: 5 }}
-                                    className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-medium transition-all"
-                                >
-                                    <Github className="w-5 h-5 inline mr-2" /> GitHub
-                                </motion.a>
-                                <motion.a
-                                    href="tel:+919765490536"
-                                    whileHover={{ scale: 1.05, rotate: -3 }}
-                                    className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-medium transition-all"
-                                >
-                                    <Phone className="w-5 h-5 inline mr-2" /> Call
-                                </motion.a>
-                                <motion.a
-                                    href="https://www.linkedin.com/in/kazi-musharraf-0674871a4"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    whileHover={{ scale: 1.05, rotate: -5 }}
-                                    className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-medium transition-all"
-                                >
-                                    <Linkedin className="w-5 h-5 inline mr-2" /> LinkedIn
-                                </motion.a>
-                            </div>
+                        <div className="flex flex-wrap justify-center gap-4">
+                            <a href="mailto:mk.knight970@gmail.com" className="btn-primary">
+                                <Mail className="w-5 h-5" />
+                                Send Email
+                            </a>
+                            <a href="https://github.com/mk-knight23" target="_blank" rel="noopener" className="btn-secondary">
+                                <Github className="w-5 h-5" />
+                                GitHub
+                            </a>
+                            <a href="https://linkedin.com/in/kazi-musharraf" target="_blank" rel="noopener" className="btn-secondary">
+                                <Linkedin className="w-5 h-5" />
+                                LinkedIn
+                            </a>
+                            <a href="tel:+919765490536" className="btn-secondary">
+                                <Phone className="w-5 h-5" />
+                                Call
+                            </a>
                         </div>
                     </motion.div>
                 </section>
             </main>
 
             {/* Footer */}
-            <footer className="py-8 px-6 border-t border-white/10">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-                    <motion.div
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 3, repeat: Infinity }}
-                    >
-                        <p>&copy; 2025 Kazi Musharraf</p>
-                    </motion.div>
-                    <p>Indie Builder & SaaS Developer — Hyderabad, India</p>
+            <footer className="border-t border-stone-200 py-8">
+                <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p className="text-stone-500 text-sm">
+                        © 2025 Kazi Musharraf. Built with React, Vite, and lots of coffee.
+                    </p>
+                    <p className="text-stone-400 text-sm">
+                        Shipping products from Hyderabad, India
+                    </p>
                 </div>
             </footer>
         </div>

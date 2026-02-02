@@ -1,5 +1,11 @@
 # Kazi Musharraf — Indie Builder & SaaS Developer
 
+## 🚀 Live Demo
+
+This portfolio is deployed to multiple platforms:
+
+
+
 **Shipping Products, Building in Public & Creating Solopreneur Ventures**
 
 ---

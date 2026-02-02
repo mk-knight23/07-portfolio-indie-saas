@@ -20,3 +20,10 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# E2E test artifacts
+playwright-report/
+test-results/
+
+# Deployment logs
+.claude/workflows/*.txt
