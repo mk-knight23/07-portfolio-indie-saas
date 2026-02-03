@@ -1,0 +1,1 @@
+{"hosting": {"public": "dist", "site": "portfolio-indie-saas", "ignore": ["firebase.json", "**/.*"], "rewrites": [{"source": "**", "destination": "/index.html"}]}}
