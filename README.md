@@ -51,6 +51,121 @@ Idea → MVP → Launch → Iterate → Growth → Ecosystem
 
 ---
 
+## 🏗️ Architecture
+
+### Project Structure
+
+```
+07-portfolio-indie-saas/
+├── src/
+│   ├── components/       # Reusable components
+│   │   ├── sections/     # Page sections
+│   │   │   ├── Hero.tsx
+│   │   │   ├── Products.tsx
+│   │   │   ├── Metrics.tsx
+│   │   │   ├── Journey.tsx
+│   │   │   └── Contact.tsx
+│   │   ├── ui/           # UI components
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Badge.tsx
+│   │   │   └── Stats.tsx
+│   │   └── layout/       # Layout components
+│   │       ├── Header.tsx
+│   │       ├── Footer.tsx
+│   │       └── Container.tsx
+│   ├── data/             # Product data
+│   │   ├── products.ts
+│   │   ├── metrics.ts
+│   │   └── journey.ts
+│   ├── animations/       # Animation configs
+│   │   ├── transitions.ts
+│   │   └── variants.ts
+│   ├── styles/           # Global styles
+│   │   └── globals.css
+│   ├── hooks/            # Custom hooks
+│   │   └── useScroll.ts
+│   ├── types/            # TypeScript types
+│   │   └── index.ts
+│   ├── utils/            # Utility functions
+│   │   └── cn.ts
+│   ├── App.tsx           # Root component
+│   └── main.tsx          # Entry point
+├── public/               # Static assets
+├── index.html            # HTML entry point
+├── package.json          # Dependencies
+├── tsconfig.json         # TypeScript config
+├── vite.config.ts        # Vite config
+├── tailwind.config.ts    # Tailwind config
+└── README.md             # This file
+```
+
+### Technology Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Framework** | React 19 |
+| **Language** | TypeScript 5 |
+| **Styling** | Tailwind CSS v4 |
+| **Animations** | Framer Motion |
+| **Icons** | Lucide React |
+| **Build Tool** | Vite 7 |
+| **Deployment** | Firebase Hosting |
+
+### Key Architectural Patterns
+
+- **Component-First**: Reusable, composable components
+- **Type Safety**: Full TypeScript coverage
+- **Animation-Driven**: Framer Motion for all interactions
+- **Data-Driven**: Product data in separate modules
+- **Performance**: Code splitting, lazy loading
+- **Accessibility**: WCAG AA compliant
+
+### Design System
+
+```typescript
+// Color Palette (Amber/Stone Theme)
+{
+  primary: 'amber-500',
+  secondary: 'stone-600',
+  accent: 'orange-500',
+  neutral: 'stone-50'
+}
+
+// Typography
+{
+  heading: 'font-bold',
+  body: 'font-normal',
+  mono: 'font-mono'
+}
+```
+
+### Startup-Style Features
+
+- **Product Showcase**: Card-based product displays
+- **Metrics Dashboard**: Live stats and growth charts
+- **Journey Timeline**: Build in public milestones
+- **Social Proof**: Testimonials and mentions
+- **CTA Optimization**: Clear conversion paths
+- **Analytics Integration**: Ready for tracking
+
+### Performance Optimizations
+
+- **Code Splitting**: Route-based and component-based
+- **Tree Shaking**: Dead code elimination
+- **Minification**: Production builds optimized
+- **Image Optimization**: Responsive images
+- **Lazy Loading**: Components and routes
+- **Caching**: Service worker ready
+
+### Content Strategy
+
+```
+Hero (Hook) → Products (Showcase) → Metrics (Proof) → Journey (Story) → Contact (CTA)
+```
+
+---
+
 ## 8 Portfolio Ecosystem
 
 This is **#07 of 8** specialized experiences:
@@ -83,58 +198,4 @@ This is **#07 of 8** specialized experiences:
 
 *Part of the 60 Projects Ecosystem — Built in public with ☕*
 
-*Last Updated: February 2026*
-
-
-## ✨ Features
-
-This repository has been upgraded with the following features:
-
-1. **Add React.memo for performance** ✅
-2. **Implement custom hooks** ✅
-3. **Add context API for state** ✅
-4. **Implement lazy loading** ✅
-5. **Add error boundaries** ✅
-6. **Create reusable components** ✅
-7. **Add TypeScript types** ✅
-8. **Implement responsive design** ✅
-9. **Add animations with Framer Motion** ✅
-10. **Create unit tests with React Testing Library** ✅
-
----
-
-## 🚀 Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-## 📦 Tech Stack
-
-- Modern web framework
-- Optimized for performance
-- Responsive design
-- Accessibility ready
-
-## 🛠️ Installation
-
-```bash
-git clone https://github.com/mk-knight23/07-portfolio-indie-saas.git
-cd 07-portfolio-indie-saas
-npm install
-```
-
-## 📝 License
-
-MIT
-
----
-
-*Last updated: 2026-02-26*
+*Last Updated: 2026-02-28*
