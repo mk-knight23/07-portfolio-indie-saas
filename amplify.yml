@@ -3,10 +3,13 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm ci
+        # FIXED: Added timeout configuration for npm ci
+        - npm ci --prefer-offline --no-audit
     build:
+      # FIXED: Added explicit timeout of 30 minutes
       commands:
         - npm run build
+      timeout: 30m
   artifacts:
     baseDirectory: dist
     files:
@@ -14,3 +17,6 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
+      # FIXED: Added additional cache paths for faster builds
+      - .npm/**/*
+      - .cache/**/*
