@@ -5,6 +5,7 @@
   "description": "Kazi Musharraf — Indie Builder & SaaS Developer Portfolio. Shipping products, building in public, and creating solopreneur ventures.",
   "type": "module",
   "scripts": {
+    "production": "npm run build && npm start",
     "lint": "eslint .",
     "dev": "vite",
     "build": "tsc && vite build",
